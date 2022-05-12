@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PagedList;
 using StudentManagementV2.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,11 @@ namespace StudentManagementV2.Domain.Repositories
                 .Where(sr => sr.Student.IdentityId.Equals(identityId))
                 .ToList();
 
+        }
+
+        public IPagedList<SubjectRegister> GetAllWithStudentSubjectSemesterPaging(string sortOrder, string CurrentSort, int page)
+        {
+            throw new NotImplementedException();
         }
 
         public SubjectRegister GetByCompositeId(string studentId, string subjectId, string semesterId, short year)
@@ -99,5 +105,7 @@ namespace StudentManagementV2.Domain.Repositories
                 .Where(sr => sr.Student.IdentityId.Equals(identityId) && sr.Year.ToString().Contains(keyword))
                 .ToList();
         }
+
+
     }
 }
