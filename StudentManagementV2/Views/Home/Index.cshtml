@@ -1,0 +1,144 @@
+﻿@page
+@using StudentManagementV2.Api.ViewModels
+@model StudentViewModel
+
+@{
+    ViewBag.Title = "Home page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="text-center d-flex flex-column align-items-center">
+    <h1 class="display-4">Welcome</h1>
+    <br />
+
+    <div class="card-deck">
+        @if(User.IsInRole("Student"))
+        {
+            <div class="card border-dark mb-3" style="max-width: 20rem;">
+                <div class="card-header" style="height:70px">
+                    @Html.ActionLink("Register Subject", "CreateNewSubjectRegister", "SubjectRegister")
+                </div>
+                <div class="card-body">
+                    <a href="@Url.Action("CreateNewSubjectRegister", "SubjectRegister")" style="color:black">
+                        <h1>
+                            <i class="far fa-address-card"></i>
+                        </h1>
+                    </a>
+                </div>
+            </div>    
+        }
+
+        @if(User.IsInRole("Student"))
+        {
+            <div class="card border-dark mb-3" style="max-width: 20rem;">
+                <div class="card-header" style="height:70px">
+                    @Html.ActionLink("Update Info", "UpdatePersonalInfo", "Student")
+                </div>
+                <div class="card-body">
+                    <a href="@Url.Action("UpdatePersonalInfo", "Student")" style="color:black">
+                        <h1>
+                            <i class="far fa-address-card"></i>
+                        </h1>
+                    </a>
+                </div>
+            </div>    
+        }
+
+        @if(User.IsInRole("Admin"))
+        {
+            <div class="card border-dark mb-3" style="max-width: 20rem;">
+                <div class="card-header" style="height:70px">
+                    @Html.ActionLink("Manage Departments", "ListAllDepartments", "Department")    
+                </div>
+                <div class="card-body">
+                    <a href="@Url.Action("ListAllDepartments", "Department")" style="color:black">
+                        <h1>
+                            <i class="far fa-list-alt"></i>
+                        </h1>
+                    </a>
+                </div>
+            </div>    
+        }
+
+        @if(User.IsInRole("Admin"))
+        {
+            <div class="card border-dark mb-3" style="max-width: 20rem;">
+                <div class="card-header" style="height:70px">
+                    @Html.ActionLink("Manage Assign Classes", "ListAllAssignClasses", "AssignClass")                
+                </div>
+                <div class="card-body">
+                    <a href="@Url.Action("ListAllAssignClasses", "AssignClass")" style="color:black">
+                        <h1>
+                            <i class="far fa-list-alt"></i>
+                        </h1>
+                    </a>
+                </div>
+            </div>    
+        }
+
+        @if(User.IsInRole("Admin"))
+        {
+            <div class="card border-dark mb-3" style="max-width: 20rem;">
+                <div class="card-header" style="height:70px">
+                    @Html.ActionLink("Manage Students", "ListAllStudents", "Student")            
+                </div>
+                <div class="card-body">
+                    <a href="@Url.Action("ListAllStudents", "Student")" style="color:black">
+                        <h1>
+                            <i class="far fa-list-alt"></i>
+                        </h1>
+                    </a>
+                </div>
+            </div>    
+        }
+
+        @if(User.IsInRole("Admin"))
+        {
+            <div class="card border-dark mb-3" style="max-width: 20rem;">
+                <div class="card-header" style="height:70px">
+                    @Html.ActionLink("Manage Subjects", "ListAllSubjects", "Subject")            
+                </div>
+                <div class="card-body">
+                    <a href="@Url.Action("ListAllSubjects", "Subject")" style="color:black">
+                        <h1>
+                            <i class="far fa-list-alt"></i>
+                        </h1>
+                    </a>
+                </div>
+            </div>    
+        }
+
+        @if(User.IsInRole("Admin"))
+        {
+            <div class="card border-dark mb-3" style="max-width: 20rem;">
+                <div class="card-header" style="height:70px">
+                    @Html.ActionLink("Manage Semesters", "ListAllSemesters", "Semester")            
+                </div>
+                <div class="card-body">
+                    <a href="@Url.Action("ListAllSemesters", "Semester")" style="color:black">
+                        <h1>
+                            <i class="far fa-list-alt"></i>
+                        </h1>
+                    </a>
+                </div>
+            </div>    
+        }
+    
+        @if(User.IsInRole("Student") || User.IsInRole("Admin"))
+        {
+            <div class="card border-dark mb-3" style="max-width: 20rem;">
+                <div class="card-header" style="height:70px">
+                    @Html.ActionLink("Manage Subjest Registrations", "ListAllSubjectRegisters", "SubjectRegister")
+                </div>
+                <div class="card-body">
+                    <a href="@Url.Action("ListAllSubjectRegisters", "SubjectRegister")" style="color:black">
+                        <h1>
+                            <i class="far fa-list-alt"></i>
+                        </h1>
+                    </a>
+                </div>
+            </div>    
+        }
+    </div>
+
+</div>

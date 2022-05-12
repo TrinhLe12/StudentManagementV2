@@ -1,0 +1,37 @@
+﻿@using StudentManagementV2.Api.ViewModels
+@model AssignClassViewModel
+
+@{
+    ViewBag.Title = "UpdateAssignClass";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Update Assign Class</h1>
+
+<form class="d-flex flex-column" method="post" action="@Url.Action("SaveUpdateAssignClass", "AssignClass")">
+    <div class="form-group">
+        <label for="classId">Class ID</label>
+        <input class="form-control" placeholder="Class ID" name="classId" id="classId" value="@Model.ClassId" readonly/>
+    </div>
+
+    <div class="form-group">
+        @*<label for="className">Class Name</label>
+        <input class="form-control" placeholder="Class Name" name="className" id="className" value="@Model.ClassName"/>*@
+        @Html.LabelFor(c => c.ClassName)
+        @Html.TextBoxFor(c => c.ClassName, new { @class="form-control", @placeholder="Class Name", @value=@Model.ClassName })
+        @Html.ValidationMessageFor(c => c.ClassName, null, new { @class="text-danger" })
+    </div>
+
+    <div class="form-group">
+        @*<label for="deptId">Department ID</label>
+        <input class="form-control" placeholder="Department ID" name="deptId" id="deptId" value="@Model.DeptId"/>*@
+        @Html.LabelFor(c => c.DeptId, "Department")
+        @Html.DropDownListFor(c => c.DeptId, @ViewBag.DepartmentSelectList as List<SelectListItem>, "Select Department", new { @class="form-control"})
+        @Html.ValidationMessageFor(c => c.DeptId, null, new { @class = "text-danger" })
+    </div>
+    
+    <div class="d-flex justify-content-end">
+        <button type="submit">Save</button>
+    </div>
+    
+</form>

@@ -1,0 +1,68 @@
+﻿@using StudentManagementV2.Api.ViewModels
+@model DepartmentViewModel
+
+@{
+    ViewBag.Title = "CreateNewDepartment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create New Department</h1>
+
+<form class="d-flex flex-column" method="post" action="@Url.Action("SaveNewDepartment", "Department")" id="createDepartmentForm">
+    <div class="form-group">
+        @*<label for="deptID">Department ID</label>
+        <input class="form-control" placeholder="Department ID" name="deptId" id="deptID"/>*@
+        @Html.LabelFor(d => d.DeptId)
+        @Html.TextBoxFor(d => d.DeptId, new { @class="form-control", @placeholder="Department Id" })
+        @Html.ValidationMessageFor(d => d.DeptId, null, new { @class="text-danger", @id="mess-dept-id" })
+    </div>
+
+    <div class="form-group">
+        @*<label for="deptName">Department Name</label>
+        <input class="form-control" placeholder="Department Name" name="deptName" id="deptName"/>*@
+        @Html.LabelFor(d => d.DeptName)
+        @Html.TextBoxFor(d => d.DeptName, new { @class="form-control", @placeholder="Department Name" })
+        @Html.ValidationMessageFor(d => d.DeptName, null, new { @class="text-danger" })
+    </div>
+    
+    <div class="d-flex justify-content-end">
+        <button type="submit">Save</button>
+    </div>
+    
+</form>
+
+<script type="text/javascript">
+
+        $("#createDepartmentForm").submit(function (e) {
+
+            e.preventDefault();
+
+            // Validate form data on server
+            $.ajax({
+                url: "https://localhost:44369/api/Department/validate-department",
+                method: "post",
+                data: $("#createDepartmentForm").serialize(),
+                success: function(response) {
+
+                    if (response.isSuccess) {
+                        
+                        $("#createDepartmentForm").unbind('submit').submit();
+                    
+                    } else {
+
+                        if (response.isDepartmentExisted) {
+
+                            $("#mess-dept-id").empty();
+
+                            $("#mess-dept-id").html("Department already exist");
+                    
+                        }
+
+                    }
+                
+                }
+            
+            })
+        
+        })
+</script>

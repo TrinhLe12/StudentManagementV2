@@ -1,0 +1,41 @@
+﻿@using StudentManagementV2.Api.ViewModels
+@model IEnumerable<DepartmentViewModel>
+
+@{
+    ViewBag.Title = "ListAllDepartments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>ListAllDepartments</h1>
+
+@Html.ActionLink("Create New Department", "CreateNewDepartment", "Department");
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DeptId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeptName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeptId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeptName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "UpdateDepartment", "Department", new { id=item.DeptId }) |
+                @Html.ActionLink("Delete", "DeleteDepartment", "Department", new { id=item.DeptId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

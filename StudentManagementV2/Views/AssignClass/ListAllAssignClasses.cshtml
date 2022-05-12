@@ -1,0 +1,48 @@
+﻿@using StudentManagementV2.Api.ViewModels
+@model IEnumerable<AssignClassViewModel>
+
+@{
+    ViewBag.Title = "ListAllAssignClasses";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>List All Assign Classes</h1>
+
+@Html.ActionLink("Create New Assign Class", "CreateNewAssignClass", "AssignClass");
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ClassId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClassName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeptId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClassId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClassName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeptId)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "UpdateAssignClass", "AssignClass", new { id=item.ClassId }) |
+                @Html.ActionLink("Delete", "DeleteAssignClass", "AssignClass", new { id=item.ClassId }) |
+                @Html.ActionLink("Detail", "GetStudentByAssignClass", "Student", new { classId=item.ClassId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

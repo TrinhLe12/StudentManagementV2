@@ -1,0 +1,41 @@
+﻿@using StudentManagementV2.Api.ViewModels
+@model IEnumerable<SemesterViewModel>
+
+@{
+    ViewBag.Title = "ListAllSemesters";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>List All Semesters</h1>
+
+@Html.ActionLink("Create New Semester", "CreateNewSemester", "Semester");
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SemesterId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SemesterName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SemesterId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SemesterName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "UpdateSemester", "Semester", new { id=item.SemesterId }) |
+                @Html.ActionLink("Delete", "DeleteSemester", "Semester", new { id=item.SemesterId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

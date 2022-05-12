@@ -1,0 +1,102 @@
+﻿@using StudentManagementV2.Api.ViewModels
+@model SubjectRegisterViewModel
+
+@{
+    ViewBag.Title = "CreateNewSubjectRegister";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create New Subject Registration</h1>
+
+<br />
+<p class="text-danger" id="mess-sub-regis-exist"></p>
+
+<form class="d-flex flex-column" method="post" action="@Url.Action("SaveNewSubjectRegister", "SubjectRegister")" id="createSubjectRegisterForm">
+    
+    @if(User.IsInRole("Student"))
+    {
+        <div class="form-group">
+            <label for="studentId">Student ID</label>
+            <input class="form-control" placeholder="Student ID" name="studentId" id="studentId" value="@ViewBag.SubjectRegisterViewModel.StudentId" readonly/>
+        </div>
+    }
+    @if(User.IsInRole("Admin"))
+    {
+        <div class="form-group">
+            @Html.LabelFor(sr => sr.StudentId, "Student ID")
+            @Html.DropDownListFor(sr => sr.StudentId, @ViewBag.StudentSelectList as List<SelectListItem>, "Select Student", new { @class="form-control"})
+            @Html.ValidationMessageFor(sr => sr.StudentId, null, new { @class = "text-danger" })
+        </div>   
+    }
+
+    <div class="form-group">
+        @Html.LabelFor(sr => sr.SubjectId, "Subject")
+        @Html.DropDownListFor(sr => sr.SubjectId, @ViewBag.SubjectSelectList as List<SelectListItem>, "Select Subject", new { @class="form-control"})
+        @Html.ValidationMessageFor(sr => sr.SubjectId, null, new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(sr => sr.SemesterId, "Semester")
+        @Html.DropDownListFor(sr => sr.SemesterId, @ViewBag.SemesterSelectList as List<SelectListItem>, "Select Semester", new { @class="form-control"})
+        @Html.ValidationMessageFor(sr => sr.SemesterId, null, new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(sr => sr.Year)
+        @Html.TextBoxFor(sr => sr.Year, new { @type="number", @class="form-control", @placeholder="Year" })
+        @Html.ValidationMessageFor(sr => sr.Year, null, new { @class = "text-danger" })
+    </div>
+
+    @if(this.User.IsInRole("Admin"))
+    {
+        @Html.LabelFor(sr => sr.Score1)
+        @Html.TextBoxFor(sr => sr.Score1, new { @class="form-control", @placeholder="Score 1" })
+        @Html.ValidationMessageFor(sr => sr.Score1, null, new { @class = "text-danger" })
+    }
+
+    @if(this.User.IsInRole("Admin"))
+    {
+        @Html.LabelFor(sr => sr.Score2)
+        @Html.TextBoxFor(sr => sr.Score2, new { @class="form-control", @placeholder="Score 2" })
+        @Html.ValidationMessageFor(sr => sr.Score2, null, new { @class = "text-danger" })
+    }
+
+    <div class="d-flex justify-content-end">
+        <button type="submit">Save</button>
+    </div>
+    
+</form>
+
+<script type="text/javascript">
+
+        $("#createSubjectRegisterForm").submit(function (e) {
+
+            e.preventDefault();
+
+            $("#mess-sub-regis-exist").empty();
+
+            // Validate form data on server
+            $.ajax({
+                url: "https://localhost:44369/api/SubjectRegister/validate-subject-register",
+                method: "post",
+                data: $("#createSubjectRegisterForm").serialize(),
+                success: function(response) {
+                
+                    if (response.isSubjectRegisterExisted) {
+
+                        $("#mess-sub-regis-exist").html("Subject Registration already exist");
+                    
+                        return;
+                
+                    } 
+
+                    if (response.isSuccess) {
+
+                        $("#createSubjectRegisterForm").unbind('submit').submit();
+                    
+                    }
+                }
+            })
+        
+         })
+    </script>

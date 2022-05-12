@@ -1,0 +1,68 @@
+﻿@using StudentManagementV2.Api.ViewModels
+@model SemesterViewModel
+
+@{
+    ViewBag.Title = "CreateNewSemester";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create New Semester</h1>
+
+<form class="d-flex flex-column" method="post" action="@Url.Action("SaveNewSemester", "Semester")" id="createSemesterForm">
+    <div class="form-group">
+        @*<label for="semesterId">Semester ID</label>
+        <input class="form-control" placeholder="Semester ID" name="semesterId" id="semesterId"/>*@
+        @Html.LabelFor(s => s.SemesterId)
+        @Html.TextBoxFor(s => s.SemesterId, new { @class="form-control", @placeholder="Semester Id" })
+        @Html.ValidationMessageFor(s => s.SemesterId, null, new { @class="text-danger", @id="mess-semester-id" })
+    </div>
+
+    <div class="form-group">
+        @*<label for="semesterName">Semester Name</label>
+        <input class="form-control" placeholder="Semester Name" name="semesterName" id="semesterName"/>*@
+        @Html.LabelFor(s => s.SemesterName)
+        @Html.TextBoxFor(s => s.SemesterName, new { @class="form-control", @placeholder="Semester Name" })
+        @Html.ValidationMessageFor(s => s.SemesterName, null, new { @class="text-danger" })
+    </div>
+    
+    <div class="d-flex justify-content-end">
+        <button type="submit">Save</button>
+    </div>
+    
+</form>
+
+<script type="text/javascript">
+
+        $("#createSemesterForm").submit(function (e) {
+
+            e.preventDefault();
+
+            // Validate form data on server
+            $.ajax({
+                url: "https://localhost:44369/api/Semester/validate-semester",
+                method: "post",
+                data: $("#createSemesterForm").serialize(),
+                success: function(response) {
+
+                    if (response.isSuccess) {
+                        
+                        $("#createSemesterForm").unbind('submit').submit();
+                    
+                    } else {
+
+                        if (response.isSemesterExisted) {
+
+                            $("#mess-semester-id").empty();
+
+                            $("#mess-semester-id").html("Semester already exist");
+                    
+                        }
+
+                    }
+                
+                }
+            
+            })
+        
+        })
+</script>

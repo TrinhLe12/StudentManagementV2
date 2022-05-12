@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="jQuery" Version="3.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
+    <PackageReference Include="RestSharp" Version="107.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StudentManagementV2.Api\StudentManagementV2.Api.csproj" />
+    <ProjectReference Include="..\StudentManagementV2.Business\StudentManagementV2.Business.csproj" />
+    <ProjectReference Include="..\StudentManagementV2.Core\StudentManagementV2.Core.csproj" />
+    <ProjectReference Include="..\StudentManagementV2.Domain\StudentManagementV2.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

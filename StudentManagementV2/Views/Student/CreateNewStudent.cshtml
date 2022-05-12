@@ -1,0 +1,119 @@
+﻿@using StudentManagementV2.Api.ViewModels
+@model StudentViewModel
+
+@{
+    ViewBag.Title = "CreateNewStudent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create New Student</h1>
+
+@using(Html.BeginForm("SaveNewStudent", "Student", FormMethod.Post, new { @class="d-flex flex-column", @id="createStudentForm" })) 
+{
+    <div class="form-group">
+        @Html.LabelFor(s => s.UserId)
+        @Html.TextBoxFor(s => s.UserId, new { @class="form-control", @placeholder="User Id" })
+        @Html.ValidationMessageFor(s => s.UserId, null, new { @class = "text-danger validation-mess" , @id="mess-user-id"})
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(s => s.UserName)
+        @Html.TextBoxFor(s => s.UserName, new { @class="form-control", @placeholder="User Name" })
+        @Html.ValidationMessageFor(s => s.UserName, null, new { @class = "text-danger validation-mess" })
+    </div>
+
+    <div class="form-group">
+        <input type="hidden" name="roleId" value="@ViewBag.Role.RoleId"/>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(s => s.ClassId, "Class")
+        @Html.DropDownListFor(s => s.ClassId, @ViewBag.AssignClassSelectList as List<SelectListItem>, "Select Class", new { @class="form-control"})
+        @Html.ValidationMessageFor(s => s.ClassId, null, new { @class = "text-danger validation-mess" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(s => s.Email)
+        @Html.TextBoxFor(s => s.Email, new { @class="form-control", @placeholder="Email" })
+        @Html.ValidationMessageFor(s => s.Email, null, new { @class = "text-danger validation-mess" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(s => s.Phone)
+        @Html.TextBoxFor(s => s.Phone, new { @class="form-control", @placeholder="Phone" })
+        @Html.ValidationMessageFor(s => s.Phone, null, new { @class = "text-danger validation-mess" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(s => s.Address)
+        @Html.TextBoxFor(s => s.Address, new { @class="form-control", @placeholder="Address" })
+        @Html.ValidationMessageFor(s => s.Address, null, new { @class = "text-danger validation-mess" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(s => s.Birthdate)
+        @Html.TextBoxFor(s => s.Birthdate, new { @type="date", @class="form-control" })
+        @Html.ValidationMessageFor(s => s.Birthdate, null, new { @class = "text-danger validation-mess", @id="mess-birthdate" })
+    </div>
+
+    <div class="form-group">
+        @Html.HiddenFor(s => s.IdentityId, new { @value=@ViewBag.StudentViewModel.IdentityId })
+    </div>
+
+    <div class="form-group">
+        @Html.HiddenFor(s => s.ReturnUrl, new { @value=@ViewBag.StudentViewModel.ReturnUrl })
+    </div>
+    
+    <div class="d-flex justify-content-end">
+        <button type="submit">Save</button>
+    </div>
+ }
+    
+    <script type="text/javascript">
+
+        $(".validation-mess").hide();
+
+        $("#createStudentForm").submit(function (e) {
+
+            e.preventDefault();
+
+            $(".validation-mess").show();
+
+            // Validate form data on server
+            $.ajax({
+                url: "https://localhost:44369/api/Student/validate-new-student",
+                method: "post",
+                data: $("#createStudentForm").serialize(),
+                success: function(response) {
+
+                    if (response.isSuccess) {
+                        
+                        $("#createStudentForm").unbind('submit').submit();
+                    
+                    } else {
+
+                        if (response.isStudentExisted) {
+
+                            $("#mess-user-id").empty();
+
+                            $("#mess-user-id").html("User Id already exist");
+                    
+                        }
+                        
+                        if (!response.isBirthdatePast) {
+
+                            $("#mess-birthdate").empty();
+
+                            $("#mess-birthdate").html("Birthdate must before today");
+
+                        }
+
+                    }
+                
+                }
+            
+            })
+        
+        })
+    </script>
+

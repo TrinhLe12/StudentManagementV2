@@ -1,0 +1,29 @@
+﻿@using StudentManagementV2.Api.ViewModels
+@model SemesterViewModel
+
+@{
+    ViewBag.Title = "UpdateSemester";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Update Semester</h1>
+
+<form class="d-flex flex-column" method="post" action="@Url.Action("SaveUpdateSemester", "Semester")">
+    <div class="form-group">
+        <label for="semesterId">Semester ID</label>
+        <input class="form-control" placeholder="Semester ID" name="semesterId" id="semesterId" value="@Model.SemesterId" readonly/>
+    </div>
+
+    <div class="form-group">
+        @*<label for="semesterName">Semester Name</label>
+        <input class="form-control" placeholder="Semester Name" name="semesterName" id="semesterName" value="@Model.SemesterName"/>*@
+        @Html.LabelFor(s => s.SemesterName)
+        @Html.TextBoxFor(s => s.SemesterName, new { @class="form-control", @placeholder="Semester Name", @value=@Model.SemesterName })
+        @Html.ValidationMessageFor(s => s.SemesterName, null, new { @class="text-danger" })
+    </div>
+    
+    <div class="d-flex justify-content-end">
+        <button type="submit">Save</button>
+    </div>
+    
+</form>

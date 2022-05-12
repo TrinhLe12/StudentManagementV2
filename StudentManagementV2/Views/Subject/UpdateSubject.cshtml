@@ -1,0 +1,29 @@
+﻿@using StudentManagementV2.Api.ViewModels
+@model SubjectViewModel
+
+@{
+    ViewBag.Title = "UpdateSubject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Update Subject</h1>
+
+<form class="d-flex flex-column" method="post" action="@Url.Action("SaveUpdateSubject", "Subject")">
+    <div class="form-group">
+        <label for="subjectId">Subject ID</label>
+        <input class="form-control" placeholder="Subject ID" name="subjectId" id="subjectId" value="@Model.SubjectId" readonly/>
+    </div>
+
+    <div class="form-group">
+        @*<label for="subjectName">Subject Name</label>
+        <input class="form-control" placeholder="Subject Name" name="subjectName" id="subjectName" value="@Model.SubjectName"/>*@
+        @Html.LabelFor(s => s.SubjectName)
+        @Html.TextBoxFor(s => s.SubjectName, new { @class="form-control", @placeholder="Subject Name", @value=@Model.SubjectName })
+        @Html.ValidationMessageFor(s => s.SubjectName, null, new { @class="text-danger" })
+    </div>
+    
+    <div class="d-flex justify-content-end">
+        <button type="submit">Save</button>
+    </div>
+    
+</form>

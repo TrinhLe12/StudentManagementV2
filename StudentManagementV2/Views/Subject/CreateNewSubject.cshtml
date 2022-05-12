@@ -1,0 +1,69 @@
+﻿@using StudentManagementV2.Api.ViewModels
+@model SubjectViewModel
+
+@{
+    ViewBag.Title = "CreateNewSubject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create New Subject</h1>
+
+<form class="d-flex flex-column" method="post" action="@Url.Action("SaveNewSubject", "Subject")" id="createSubjectForm">
+    <div class="form-group">
+        @*<label for="subjectId">Subject ID</label>
+        <input class="form-control" placeholder="Subject ID" name="subjectId" id="subjectId"/>*@
+        @Html.LabelFor(s => s.SubjectId)
+        @Html.TextBoxFor(s => s.SubjectId, new { @class="form-control", @placeholder="Subject Id" })
+        @Html.ValidationMessageFor(s => s.SubjectId, null, new { @class="text-danger", @id="mess-subject-id" })
+    </div>
+
+    <div class="form-group">
+        @*<label for="subjectName">Subject Name</label>
+        <input class="form-control" placeholder="Subject Name" name="subjectName" id="subjectName"/>*@
+        @Html.LabelFor(s => s.SubjectName)
+        @Html.TextBoxFor(s => s.SubjectName, new { @class="form-control", @placeholder="Subject Name" })
+        @Html.ValidationMessageFor(s => s.SubjectName, null, new { @class="text-danger" })
+    </div>
+    
+    <div class="d-flex justify-content-end">
+        <button type="submit">Save</button>
+    </div>
+    
+</form>
+
+<script type="text/javascript">
+
+        $("#createSubjectForm").submit(function (e) {
+
+            e.preventDefault();
+
+            // Validate form data on server
+            $.ajax({
+                url: "https://localhost:44369/api/Subject/validate-subject",
+                method: "post",
+                data: $("#createSubjectForm").serialize(),
+                success: function(response) {
+
+                    if (response.isSuccess) {
+                        
+                        $("#createSubjectForm").unbind('submit').submit();
+                    
+                    } else {
+
+                        if (response.isSubjectExisted) {
+
+                            $("#mess-subject-id").empty();
+
+                            $("#mess-subject-id").html("Subject already exist");
+                    
+                        }
+
+                    }
+                
+                }
+            
+            })
+        
+        })
+</script>
+

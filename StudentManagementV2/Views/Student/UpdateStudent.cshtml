@@ -1,0 +1,140 @@
+﻿@using StudentManagementV2.Api.ViewModels
+@model StudentViewModel
+
+@{
+    ViewBag.Title = "UpdateStudent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string dob = null;
+    if (@Model.Birthdate.HasValue)
+    {
+        DateTime dateTime = (DateTime) @Model.Birthdate;
+
+        string year = dateTime.Year.ToString();
+
+        string month = null;
+        if (dateTime.Month <= 9)
+        {
+            month = "0" + dateTime.Month;
+        } else
+        {
+            month = dateTime.Month.ToString();
+        }
+
+        string day = null;
+        if (dateTime.Day <= 9)
+        {
+            day = "0" + dateTime.Day;
+        } else
+        {
+            day = dateTime.Day.ToString();
+        }
+
+        dob = year + "-" + month + "-" + day;
+    }
+    ;
+}
+
+<h1>Update Student</h1>
+
+<form class="d-flex flex-column" method="post" action="@Url.Action("SaveUpdateStudent", "Student")" id="updateStudentForm">
+
+    <div class="form-group">
+        @Html.LabelFor(s => s.UserId)
+        @Html.TextBoxFor(s => s.UserId, new { @class="form-control", @placeholder="User Id", @value=@Model.UserId, @readonly="readonly" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(s => s.UserName)
+        @Html.TextBoxFor(s => s.UserName, new { @class="form-control", @placeholder="User Name", @value=@Model.UserName })
+        @Html.ValidationMessageFor(s => s.UserName, null, new { @class = "text-danger validation-mess" })
+    </div>
+
+    <div class="form-group">
+        <input type="hidden" name="roleId" id="roleId" value="@Model.RoleId"/>
+    </div>
+
+    @if (this.User.IsInRole("Admin"))
+    {
+        <div class="form-group">
+            @*<label for="classId">Class ID</label>
+            <input class="form-control" placeholder="Class ID" name="classId" id="classId" value="@Model.ClassId" readonly/>*@
+            @Html.LabelFor(s => s.ClassId, "Class")
+            @Html.DropDownListFor(s => s.ClassId, @ViewBag.AssignClassSelectList as List<SelectListItem>, "Select Class", new { @class="form-control"})
+            @Html.ValidationMessageFor(s => s.ClassId, null, new { @class = "text-danger" })
+        </div>
+    }
+
+    @if (this.User.IsInRole("Student"))
+    {
+        <div class="form-group">
+            <label for="classId">Class ID</label>
+            <input class="form-control" placeholder="Class ID" name="classId" id="classId" value="@Model.ClassId" readonly/>
+        </div>        
+    }
+
+    <div class="form-group">
+        @Html.LabelFor(s => s.Email)
+        @Html.TextBoxFor(s => s.Email, new { @class="form-control", @placeholder="Email", @value=@Model.Email })
+        @Html.ValidationMessageFor(s => s.Email, null, new { @class = "text-danger validation-mess" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(s => s.Phone)
+        @Html.TextBoxFor(s => s.Phone, new { @class="form-control", @placeholder="Phone", @value=@Model.Phone })
+        @Html.ValidationMessageFor(s => s.Phone, null, new { @class = "text-danger validation-mess" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(s => s.Address)
+        @Html.TextBoxFor(s => s.Address, new { @class="form-control", @placeholder="Address", @value=@Model.Address })
+        @Html.ValidationMessageFor(s => s.Address, null, new { @class = "text-danger validation-mess" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(s => s.Birthdate)
+        @Html.TextBoxFor(s => s.Birthdate, "{0:yyyy-MM-dd}", new { @type="date", @class="form-control", @value=@dob })
+        @Html.ValidationMessageFor(s => s.Birthdate, null, new { @class = "text-danger validation-mess", @id="mess-birthdate" })
+    </div>
+    
+    <div class="d-flex justify-content-end">
+        <button type="submit">Save</button>
+    </div>
+    
+</form>
+
+<script type="text/javascript">
+
+        $("#updateStudentForm").submit(function (e) {
+
+            e.preventDefault();
+
+            // Validate form data on server
+            $.ajax({
+                url: "https://localhost:44369/api/Student/validate-new-student",
+                method: "post",
+                data: $("#updateStudentForm").serialize(),
+                success: function(response) {
+
+                    if (response.isStudentExisted && response.isBirthdatePast) {
+                        
+                        $("#updateStudentForm").unbind('submit').submit();
+                    
+                    } else {
+                        
+                        if (!response.isBirthdatePast) {
+
+                            $("#mess-birthdate").empty();
+
+                            $("#mess-birthdate").html("Birthdate must before today");
+
+                        }
+
+                    }
+                
+                }
+            
+            })
+        
+        })
+</script>

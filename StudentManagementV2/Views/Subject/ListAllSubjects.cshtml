@@ -1,0 +1,41 @@
+﻿@using StudentManagementV2.Api.ViewModels
+@model IEnumerable<SubjectViewModel>
+
+@{
+    ViewBag.Title = "ListAllSubjects";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>List All Subjects</h1>
+
+@Html.ActionLink("Create New Subject", "CreateNewSubject", "Subject");
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SubjectId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubjectName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubjectId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubjectName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "UpdateSubject", "Subject", new { id=item.SubjectId }) |
+                @Html.ActionLink("Delete", "DeleteSubject", "Subject", new { id=item.SubjectId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

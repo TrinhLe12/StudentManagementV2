@@ -1,0 +1,108 @@
+﻿@model StudentManagementV2.Api.ViewModels.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <section>
+
+            <div>
+                <h2 class="text-dark">Register New Account</h2>
+            </div>
+
+            <hr />
+            
+            <div class="border border-dark rounded p-5">
+
+                <form id="form-regis" method="post" action="@Url.Action("Register", "Account")">
+                
+                    <input type="hidden" value="@Model.ReturnUrl"/>
+               
+                    <div class="form-group">
+                        @*<label for="email">Email</label>
+                        <input class="form-control" type="email" name="email" id="email" placeholder="Email"/>
+                        <span id="mess-email"></span>*@
+                        @Html.LabelFor(r => r.Email)
+                        @Html.TextBoxFor(r => r.Email, new { @type="email", @class="form-control", @placeholder="Email"})
+                        @Html.ValidationMessageFor(r => r.Email, null, new { @class="text-danger", @id="mess-email" })
+                    </div>
+                
+                    <div class="form-group">
+                        @*<label for="password">Password</label>
+                        <input class="form-control" type="password" name="password" id="password" placeholder="Password"/>
+                        <span id="mess-password"></span>*@
+                        @Html.LabelFor(r => r.Password)
+                        @Html.TextBoxFor(r => r.Password, new { @type="password", @class="form-control", @placeholder="Password"})
+                        @Html.ValidationMessageFor(r => r.Password, null, new { @class="text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @*<label for="confirmPassword">Confirm Password</label>
+                        <input class="form-control" type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password"/>
+                        <span id="mess-confirm-password"></span>*@
+                        @Html.LabelFor(r => r.ConfirmPassword)
+                        @Html.TextBoxFor(r => r.ConfirmPassword, new { @type="password", @class="form-control", @placeholder="Confirm Password"})
+                        @Html.ValidationMessageFor(r => r.ConfirmPassword, null, new { @class="text-danger" })
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select class="form-control" name="role" id="role">
+                            <option value="">Choose a role</option>
+                            <option value="Student">Student</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                        @Html.ValidationMessage("UnspecifiedRole", new { @class="text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-secondary">Register</button>
+                    </div>
+
+                </form>
+
+            </div>
+            
+        </section>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+
+        $("#form-regis").submit(function (e) {
+
+            e.preventDefault();
+
+            $("#mess-email").empty();
+
+            // Validate form data on server
+            $.ajax({
+                url: "ValidateNewAccount",
+                method: "post",
+                data: $("#form-regis").serialize(),
+                success: function(response) {
+                
+                    if (response.isEmailExisted) {
+
+                        $("#mess-email").html("Email already exist");
+                    
+                        return;
+                
+                    } 
+
+                    if (response.isSuccess) {
+
+                        $("#form-regis").unbind('submit').submit();
+                    
+                    }
+                }
+            })
+        
+         })
+
+</script>
+
+

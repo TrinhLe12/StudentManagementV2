@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StudentManagementV2.Core\StudentManagementV2.Core.csproj" />
+    <ProjectReference Include="..\StudentManagementV2.Domain\StudentManagementV2.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
