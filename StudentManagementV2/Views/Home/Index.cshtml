@@ -139,6 +139,22 @@
                 </div>
             </div>    
         }
+
+        @if(User.IsInRole("Admin"))
+        {
+            <div class="card border-dark mb-3" style="max-width: 20rem;">
+                <div class="card-header" style="height:70px">
+                    @Html.ActionLink("Manage Subject Registers Paging", "ListAllSubjectRegistersPaging", "SubjectRegister", new { page = "1" })            
+                </div>
+                <div class="card-body">
+                    <a href="@Url.Action("ListAllSubjectRegistersPaging", "SubjectRegister", new { page = "1" })" style="color:black">
+                        <h1>
+                            <i class="far fa-list-alt"></i>
+                        </h1>
+                    </a>
+                </div>
+            </div>    
+        }
     </div>
 
 </div>

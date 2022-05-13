@@ -1,4 +1,6 @@
-﻿using StudentManagementV2.Core.Models;
+﻿using PagedList;
+using StudentManagementV2.Core.Models;
+using StudentManagementV2.Core.PaginatedLists;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,5 +28,7 @@ namespace StudentManagementV2.Business.Services
         IEnumerable<SubjectRegister> SearchBySemester(string keyword, string identityId);
 
         IEnumerable<SubjectRegister> SearchByYear(string keyword, string identityId);
+
+        PaginatedList<SubjectRegister> GetAllWithStudentSubjectSemesterPaging(int page);
     }
 }

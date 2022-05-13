@@ -12,5 +12,7 @@ namespace StudentManagementV2.Core.Constants
             R02, // Instructor   
             R03  // Admin
         }
+
+        public static readonly int PAGE_SIZE = 5;
     }
 }

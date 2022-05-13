@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using StudentManagementV2.Core.PaginatedLists;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace StudentManagementV2.ApiHelpers
@@ -16,6 +19,36 @@ namespace StudentManagementV2.ApiHelpers
             RestRequest request = new RestRequest(url, Method.Get);
             var response = await client.ExecuteGetAsync(request);
             return response.Content;
+        }
+
+        public static async Task<PaginatedList<T>> GetAllPaging<T>(string url) where T : class 
+        {
+            RestClient client = new RestClient(baseUrl);
+            RestRequest request = new RestRequest(url, Method.Get);
+            var response = await client.ExecuteGetAsync<PaginatedList<T>>(request);
+
+            var headers = response.Headers;
+            int totalPages = 0;
+            int pageIndex = 0;
+
+            foreach (var header in headers) {
+                if (header.Name.Equals("TotalPages"))
+                {
+                    totalPages = Int32.Parse(header.Value.ToString());
+                    continue;
+                } 
+                
+                if (header.Name.Equals("PageIndex"))
+                {
+                    pageIndex = Int32.Parse(header.Value.ToString());
+                    continue;
+                }
+            }
+
+            PaginatedList<T> result = new PaginatedList<T>(response.Data, totalPages, pageIndex);
+
+            return result;
+            
         }
 
         public static async Task<string> GetById(string url)

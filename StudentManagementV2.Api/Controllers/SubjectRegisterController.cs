@@ -2,9 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using PagedList;
 using StudentManagementV2.Api.ViewModels;
 using StudentManagementV2.Business.Services;
+using StudentManagementV2.Core.Constants;
 using StudentManagementV2.Core.Models;
+using StudentManagementV2.Core.PaginatedLists;
 using System;
 using System.Collections.Generic;
 
@@ -215,6 +219,50 @@ namespace StudentManagementV2.Api.Controllers
             }
 
             return new JsonResult(new { isSuccess = true });
+        }
+
+        [HttpGet("get-all-subject-registers-paging/{page}")]
+        public PaginatedList<SubjectRegisterWithStudentSubjectSemesterViewModel> GetAllPaging(int page)
+        {
+
+            PaginatedList<SubjectRegister> subjectRegisterPage = subjectRegisterService.GetAllWithStudentSubjectSemesterPaging(page);
+
+            List<SubjectRegisterWithStudentSubjectSemesterViewModel> subjectRegisterViewModels = new List<SubjectRegisterWithStudentSubjectSemesterViewModel>();
+
+            subjectRegisterPage.ForEach(sr => {
+
+                subjectRegisterViewModels.Add(_mapper.Map<SubjectRegisterWithStudentSubjectSemesterViewModel>(sr));
+
+            });
+
+            PaginatedList<SubjectRegisterWithStudentSubjectSemesterViewModel> subjectRegisterViewModelPage = 
+                new PaginatedList<SubjectRegisterWithStudentSubjectSemesterViewModel>(subjectRegisterViewModels, subjectRegisterPage.TotalPages, page);
+
+            Response.Headers.Add("TotalPages", JsonConvert.SerializeObject(subjectRegisterViewModelPage.TotalPages));
+            Response.Headers.Add("PageIndex", JsonConvert.SerializeObject(subjectRegisterViewModelPage.PageIndex));
+            //Response.Headers.Add("HasNextPage", JsonConvert.SerializeObject(subjectRegisterViewModelPage.HasNextPage));
+            //Response.Headers.Add("HasPreviousPage", JsonConvert.SerializeObject(subjectRegisterViewModelPage.HasPreviousPage));
+
+            return subjectRegisterViewModelPage;
+
+            //IPagedList<SubjectRegister> subjectRegisterPage = subjectRegisterService.GetAllWithStudentSubjectSemesterPaging(page);
+
+            //IEnumerator<SubjectRegister> subjectRegisters = subjectRegisterPage.GetEnumerator();
+
+            //List<SubjectRegisterWithStudentSubjectSemesterViewModel> subjectRegisterViewModels = new List<SubjectRegisterWithStudentSubjectSemesterViewModel>();
+
+            //while (subjectRegisters.MoveNext())
+            //{
+            //    subjectRegisterViewModels.Add(_mapper.Map<SubjectRegisterWithStudentSubjectSemesterViewModel>(subjectRegisters.Current));
+            //}
+
+            //Object[] resultArray = new Object[3];
+
+            //resultArray[0] = subjectRegisterViewModels;
+            //resultArray[1] = subjectRegisterPage.PageCount;
+            //resultArray[2] = subjectRegisterPage.PageNumber;
+
+            //return resultArray;
         }
     }
 }

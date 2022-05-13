@@ -1,0 +1,148 @@
+﻿@using StudentManagementV2.Api.ViewModels
+@using StudentManagementV2.Core.PaginatedLists
+@model PaginatedList<SubjectRegisterWithStudentSubjectSemesterViewModel>
+
+@{
+    ViewBag.Title = "ListAllSubjectRegistersPaging";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>List All Subject Registers Paging</h1>
+
+@Html.ActionLink("Create New Subject Registration", "CreateNewSubjectRegister", "SubjectRegister")
+<br />
+
+<div class="row d-flex justify-content-end">
+    <div class="col-6">
+        <form class="d-flex" action="@Url.Action("SearchSubjectRegister", "SubjectRegister")" method="get" id="searchForm">
+            <select name="searchBy" id="searchBy">
+                <option value="">Search By</option>
+                <option value="Subject">Subject</option>
+                <option value="Semester">Semester</option>
+                <option value="Year">Year</option>
+            </select>
+            <input class="form-control" name="keyword" placeholder="Keyword" id="keyword"/>
+            <button type="submit">Search</button>
+        </form>
+        @Html.ValidationMessage("UnspecifiedSearchBy", new { @class="text-danger", @id="mess-search" })
+    </div>
+</div>
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Student Id
+            </th>
+            <th>
+                User Name
+            </th>
+            <th>
+                Subject Id
+            </th>
+            <th>
+                Subject Name
+            </th>
+            <th>
+                Semester Id
+            </th>
+            <th>
+                Semester Name
+            </th>
+            <th>
+                Year
+            </th>
+            <th>
+                Score 1
+            </th>
+            <th>
+                Score 2
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubjectId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubjectName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SemesterId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SemesterName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Score1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Score2)
+            </td>
+            <td>
+                @if(this.User.IsInRole("Admin"))
+                {
+                    @Html.ActionLink("Edit", "UpdateSubjectRegister", "SubjectRegister", 
+                        new { studentId=item.StudentId, subjectId=item.SubjectId, semesterId=item.SemesterId, year=item.Year })
+
+                    <span>|</span>
+
+                    @Html.ActionLink("Delete", "DeleteSubjectRegister", "SubjectRegister",
+                        new { studentId = item.StudentId, subjectId = item.SubjectId, semesterId = item.SemesterId, year = item.Year })        
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+Page @Model.PageIndex of @Model.TotalPages
+<br />
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+@Html.ActionLink("Previous", "ListAllSubjectRegistersPaging", "SubjectRegister", new { page = @Model.PageIndex - 1 }, new { @class="btn btn-outline-dark " + @prevDisabled })
+
+@Html.ActionLink("Next", "ListAllSubjectRegistersPaging", "SubjectRegister", new { page = @Model.PageIndex + 1 }, new { @class="btn btn-outline-dark " + @nextDisabled })
+
+<script type="text/javascript">
+
+    $("#searchForm").submit(function (e) {
+
+        e.preventDefault();
+
+        $("#mess-search").empty();
+
+        const searchBy = $("#searchBy").val();
+        const keyword = $("#keyword").val();
+
+        if (searchBy == null || searchBy == undefined || searchBy == "" || keyword == null || keyword == undefined || keyword == "") {
+
+            $("#mess-search").html("Must specify SearchBy and Keyword");
+
+        } else {
+
+            $("#searchForm").unbind('submit').submit();
+
+        }
+
+    })
+
+</script>
+

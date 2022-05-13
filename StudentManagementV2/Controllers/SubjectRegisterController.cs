@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using StudentManagementV2.Api.ViewModels;
 using StudentManagementV2.ApiHelpers;
 using StudentManagementV2.Core.Models;
+using StudentManagementV2.Core.PaginatedLists;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -190,6 +191,20 @@ namespace StudentManagementV2.Controllers
             }
 
             return View("ListAllSubjectRegisters", result);
+
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<ActionResult> ListAllSubjectRegistersPaging(int page)
+        {
+            string url = $"SubjectRegister/get-all-subject-registers-paging/{page}";
+            var response = await ApiHelper.GetAllPaging<SubjectRegisterWithStudentSubjectSemesterViewModel>(url);
+
+            //PaginatedList<SubjectRegisterWithStudentSubjectSemesterViewModel> result 
+            //    = JsonConvert.DeserializeObject<PaginatedList<SubjectRegisterWithStudentSubjectSemesterViewModel>>(response);
+
+            return View(response);
 
         }
     }
